@@ -45,6 +45,12 @@ function Navbar() {
 
       {/* RIGHT SIDE LINKS */}
       <ul className={`navbar-right ${menuOpen ? "active" : ""}`}>
+        <li className="nav-item">
+
+          <NavLink to="/Home" className="nav-link" onClick={closeMenu}>
+            <span className="nav-icon">🏠</span> Home
+          </NavLink>
+        </li>
 
         <li className="nav-item">
           <NavLink to="/citizen" className="nav-link" onClick={closeMenu}>
@@ -54,7 +60,7 @@ function Navbar() {
 
         <li className="nav-item">
           <NavLink to="/dispatcher" className="nav-link" onClick={closeMenu}>
-            <span className="nav-icon">🎧</span> Dispatcher
+            <span className="nav-icon">🤵‍♂️</span> Dispatcher
           </NavLink>
         </li>
 

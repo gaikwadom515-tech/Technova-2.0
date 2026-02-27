@@ -1,0 +1,161 @@
+/* ===== MAIN WRAPPER ===== */
+.home-wrapper {
+  padding: 110px 40px 60px 40px; /* space for fixed navbar */
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  overflow-x: hidden;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  text-align: center;
+  margin-bottom: 80px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hero p {
+  font-size: 18px;
+  opacity: 0.85;
+  margin-bottom: 35px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* ===== PRIMARY BUTTON ===== */
+.primary-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #00e0ff, #0072ff);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 224, 255, 0.6);
+}
+
+/* ===== STATS SECTION ===== */
+.stats-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  margin-bottom: 80px;
+}
+
+/* ===== STAT CARD ===== */
+.stat-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 35px;
+  border-radius: 18px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  transition: 0.4s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.stat-card:hover {
+  transform: translateY(-12px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.stat-card h2 {
+  font-size: 30px;
+  margin-bottom: 10px;
+  color: #00e0ff;
+}
+
+.stat-card p {
+  font-size: 15px;
+  opacity: 0.8;
+}
+
+/* ===== PORTAL SECTION ===== */
+.portal-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 30px;
+}
+
+/* ===== PORTAL CARD ===== */
+.portal-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 30px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.portal-card h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.portal-card p {
+  font-size: 14px;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.portal-card:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 15px 35px rgba(0, 224, 255, 0.4);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .hero h1 {
+    font-size: 34px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .home-wrapper {
+    padding: 100px 20px 40px 20px;
+  }
+
+  .hero h1 {
+    font-size: 26px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  .primary-btn {
+    width: 100%;
+  }
+}
