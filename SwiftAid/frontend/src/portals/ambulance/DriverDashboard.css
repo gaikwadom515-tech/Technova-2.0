@@ -1,0 +1,29 @@
+.incident-card {
+  background: white;
+  padding: 30px;
+  margin-top: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.complete-btn {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background: #00c853;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.complete-btn:hover {
+  background: #009624;
+}
+
+.no-incident {
+  margin-top: 40px;
+  text-align: center;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+}

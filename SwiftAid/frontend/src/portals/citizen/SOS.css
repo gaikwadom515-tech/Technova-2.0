@@ -1,0 +1,49 @@
+.sos-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: 20px;
+}
+
+.sos-container h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+.sos-container select {
+  padding: 12px;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+
+.sos-button {
+  background: #c00000;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.sos-button:hover {
+  background: #900000;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .sos-container h1 {
+    font-size: 26px;
+  }
+
+  .sos-button {
+    width: 100%;
+    max-width: 300px;
+  }
+}

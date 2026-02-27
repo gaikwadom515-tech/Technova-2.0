@@ -1,0 +1,16 @@
+.dispatcher-body {
+  display: flex;
+  min-height: calc(100vh - 70px);
+}
+
+.dispatcher-content {
+  flex: 1;
+  padding: 30px;
+  background: #f4f6f9;
+}
+
+@media (max-width: 768px) {
+  .dispatcher-body {
+    flex-direction: column;
+  }
+}

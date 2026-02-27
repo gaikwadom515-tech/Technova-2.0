@@ -1,0 +1,24 @@
+.hospital-card {
+  background: white;
+  padding: 30px;
+  margin-top: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.bed-section {
+  margin-top: 20px;
+}
+
+.bed-section button {
+  margin-right: 10px;
+  padding: 6px 12px;
+  border: none;
+  background: #00e0ff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.bed-section button:hover {
+  background: #0099cc;
+}

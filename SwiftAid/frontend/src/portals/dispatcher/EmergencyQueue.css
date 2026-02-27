@@ -1,0 +1,42 @@
+.emergency-table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.emergency-table th,
+.emergency-table td {
+  padding: 15px;
+  text-align: left;
+}
+
+.emergency-table th {
+  background: #1a2a3a;
+  color: white;
+}
+
+.priority.High {
+  color: red;
+  font-weight: bold;
+}
+
+.priority.Medium {
+  color: orange;
+  font-weight: bold;
+}
+
+.priority.Low {
+  color: green;
+  font-weight: bold;
+}
+
+.assign-btn {
+  padding: 8px 12px;
+  background: #00e0ff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
