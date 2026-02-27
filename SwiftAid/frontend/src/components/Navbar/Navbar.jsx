@@ -45,7 +45,12 @@ function Navbar() {
 
       {/* RIGHT SIDE LINKS */}
       <ul className={`navbar-right ${menuOpen ? "active" : ""}`}>
-        
+
+        <li className="nav-item">
+          <NavLink to="/" className="nav-link" onClick={closeMenu}>
+            <span className="nav-icon">🏠</span> Home
+          </NavLink>
+        </li>
 
         <li className="nav-item">
           <NavLink to="/citizen" className="nav-link" onClick={closeMenu}>
