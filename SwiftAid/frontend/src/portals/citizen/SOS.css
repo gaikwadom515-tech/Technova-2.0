@@ -1,49 +1,475 @@
 .sos-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  text-align: center;
-  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .sos-container h1 {
-  font-size: 36px;
-  margin-bottom: 30px;
+  color: #dc2626;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 
-.sos-container select {
-  padding: 12px;
-  width: 100%;
-  max-width: 300px;
-  margin-bottom: 25px;
-  font-size: 16px;
+.sos-subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
 }
 
-.sos-button {
-  background: #c00000;
+/* Location Status */
+.location-status {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #f3f4f6;
+}
+
+.location-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #3b82f6;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.location-error {
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.retry-btn {
+  padding: 0.25rem 1rem;
+  background: #3b82f6;
   color: white;
   border: none;
-  padding: 15px 40px;
-  font-size: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.retry-btn:hover {
+  background: #2563eb;
+}
+
+.location-success {
+  color: #059669;
+}
+
+/* Emergency Type Section */
+.emergency-type-section {
+  margin-bottom: 2rem;
+}
+
+.emergency-type-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.emergency-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.emergency-btn {
+  padding: 1rem;
+  border: 2px solid #e5e7eb;
+  background: white;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.sos-button:hover {
-  background: #900000;
+.emergency-btn:hover {
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
-/* Mobile */
+.emergency-btn.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.form-section h3 {
+  color: #374151;
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+  border-color: #9ca3af;
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+/* Emergency Contacts */
+.emergency-contacts {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  color: white;
+}
+
+.emergency-contacts h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.contact-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.contact-card strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.contact-card a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.contact-card a:hover {
+  text-decoration: underline;
+}
+
+/* Messages */
+.error-message {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.success-message {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #d1fae5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  color: #059669;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* SOS Button */
+.sos-button {
+  width: 100%;
+  padding: 1.5rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sos-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.sos-button:hover:not(:disabled) {
+  background: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4);
+}
+
+.sos-button:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
+}
+
+.sos-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(220, 38, 38, 0.3);
+}
+
+.sos-button.submitting {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.sos-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Confirmation Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.confirmation-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.confirmation-modal h2 {
+  color: #dc2626;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.confirmation-modal p {
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+.emergency-summary {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.emergency-summary p {
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: #d1d5db;
+}
+
+.confirm-btn {
+  background: #dc2626;
+  color: white;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.cancel-btn:disabled,
+.confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
+  .sos-container {
+    padding: 1rem;
+  }
+
   .sos-container h1 {
-    font-size: 26px;
+    font-size: 2rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .emergency-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contacts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .modal-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .sos-container h1 {
+    font-size: 1.75rem;
+  }
+
+  .emergency-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .contacts-grid {
+    grid-template-columns: 1fr;
   }
 
   .sos-button {
-    width: 100%;
-    max-width: 300px;
+    padding: 1rem;
+    font-size: 1.25rem;
   }
 }

@@ -9,18 +9,20 @@ import Register from "../components/Auth/Register";
 
 
 
+
 function AppRoutes() {
   return (
     <Router>
       <Routes>
        
-        <Route path="/Home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/citizen" element={<SOS />} />
         <Route path="/dispatcher" element={<EmergencyQueue />} />
         <Route path="/driver" element={<DriverDashboard />} />
         <Route path="/hospital" element={<HospitalDashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />   
+
       </Routes>
     </Router>
   );
