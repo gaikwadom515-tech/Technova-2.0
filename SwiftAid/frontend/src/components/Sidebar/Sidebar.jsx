@@ -10,9 +10,7 @@ function Sidebar() {
         Emergency Queue
       </NavLink>
 
-      <NavLink to="/dispatcher" className="sidebar-link">
-        Assign Ambulance
-      </NavLink>
+      
     </div>
   );
 }

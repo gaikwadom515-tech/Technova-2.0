@@ -37,13 +37,13 @@ function HospitalDashboard() {
   // Blood types
   const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-  // Bed types data
+  // Bed types data with correct field names
   const bedTypes = [
-    { id: 'general', name: 'General Ward', icon: '🛏️', total: 200 },
-    { id: 'icu', name: 'ICU', icon: '💉', total: 20 },
-    { id: 'ventilator', name: 'Ventilator', icon: '🫁', total: 15 },
-    { id: 'hdu', name: 'HDU', icon: '🏥', total: 12 },
-    { id: 'isolation', name: 'Isolation', icon: '🔬', total: 8 },
+    { id: 'general', name: 'General Ward', icon: '🛏️', total: 200, field: 'availableBeds' },
+    { id: 'icu', name: 'ICU', icon: '💉', total: 20, field: 'availableICU' },
+    { id: 'ventilator', name: 'Ventilator', icon: '🫁', total: 15, field: 'ventilatorBeds' },
+    { id: 'hdu', name: 'HDU', icon: '🏥', total: 12, field: 'hduBeds' },
+    { id: 'isolation', name: 'Isolation', icon: '🔬', total: 8, field: 'isolationBeds' },
   ];
 
   // Update date every minute
@@ -67,6 +67,21 @@ function HospitalDashboard() {
         addRecentUpdate('📊 Hospital data refreshed', 'info');
       } else {
         console.log("Hospital document not found!");
+        // Set default hospital data if not exists
+        const defaultHospital = {
+          name: "City Care Hospital",
+          availableBeds: 156,
+          availableICU: 8,
+          ventilatorBeds: 5,
+          hduBeds: 6,
+          isolationBeds: 3,
+          totalBeds: 200,
+          totalICU: 20,
+          bloodBank: {},
+          address: "City Central, Main Street",
+          phone: "+919876543210"
+        };
+        setHospital(defaultHospital);
         setLoading(false);
       }
     }, (error) => {
@@ -88,24 +103,114 @@ function HospitalDashboard() {
         doctorsSnapshot.forEach((doc) => {
           doctorsList.push({ id: doc.id, ...doc.data() });
         });
-        setDoctors(doctorsList);
+        
+        // If no doctors, add sample data
+        if (doctorsList.length === 0) {
+          const sampleDoctors = [
+            {
+              id: "doc1",
+              name: "Rajesh Sharma",
+              specialization: "Cardiologist",
+              available: true,
+              experience: 15,
+              successRate: 98,
+              operations: 500,
+              phone: "+91 98765 43210",
+              email: "dr.rajesh@hospital.com",
+              qualification: "MBBS, MD, DM Cardiology",
+              license: "MCI-12345",
+              joined: "Jan 2018",
+              languages: "English, Hindi, Gujarati",
+              room: "Block A, Room 203",
+              rating: 4.8,
+              patients: 1200
+            },
+            {
+              id: "doc2",
+              name: "Priya Patel",
+              specialization: "Surgeon",
+              available: true,
+              experience: 12,
+              successRate: 96,
+              operations: 350,
+              phone: "+91 98765 43211",
+              email: "dr.priya@hospital.com",
+              qualification: "MBBS, MS Surgery",
+              license: "MCI-12346",
+              joined: "Mar 2019",
+              languages: "English, Hindi",
+              room: "Block B, Room 105",
+              rating: 4.7,
+              patients: 800
+            },
+            {
+              id: "doc3",
+              name: "Amit Kumar",
+              specialization: "Physician",
+              available: false,
+              experience: 8,
+              successRate: 94,
+              operations: 200,
+              phone: "+91 98765 43212",
+              email: "dr.amit@hospital.com",
+              qualification: "MBBS, MD Medicine",
+              license: "MCI-12347",
+              joined: "Jun 2020",
+              languages: "English, Hindi",
+              room: "Block C, Room 301",
+              rating: 4.5,
+              patients: 600
+            }
+          ];
+          setDoctors(sampleDoctors);
+        } else {
+          setDoctors(doctorsList);
+        }
       } catch (error) {
         console.error("Error fetching doctors:", error);
+        // Set sample doctors on error
+        setDoctors([
+          {
+            id: "doc1",
+            name: "Rajesh Sharma",
+            specialization: "Cardiologist",
+            available: true,
+            experience: 15,
+            successRate: 98,
+            operations: 500,
+            phone: "+91 98765 43210",
+            email: "dr.rajesh@hospital.com",
+            qualification: "MBBS, MD, DM Cardiology",
+            license: "MCI-12345",
+            joined: "Jan 2018",
+            languages: "English, Hindi, Gujarati",
+            room: "Block A, Room 203",
+            rating: 4.8,
+            patients: 1200
+          }
+        ]);
       }
     };
 
     fetchDoctors();
 
-    const doctorsRef = collection(db, "hospitals", hospitalId, "doctors");
-    const unsubscribe = onSnapshot(doctorsRef, (snapshot) => {
-      const doctorsList = [];
-      snapshot.forEach((doc) => {
-        doctorsList.push({ id: doc.id, ...doc.data() });
+    // Real-time listener for doctors
+    try {
+      const doctorsRef = collection(db, "hospitals", hospitalId, "doctors");
+      const unsubscribe = onSnapshot(doctorsRef, (snapshot) => {
+        const doctorsList = [];
+        snapshot.forEach((doc) => {
+          doctorsList.push({ id: doc.id, ...doc.data() });
+        });
+        if (doctorsList.length > 0) {
+          setDoctors(doctorsList);
+        }
       });
-      setDoctors(doctorsList);
-    });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    } catch (error) {
+      console.error("Error setting up doctors listener:", error);
+    }
   }, [hospitalId]);
 
   const addRecentUpdate = (message, type = 'info') => {
@@ -119,16 +224,12 @@ function HospitalDashboard() {
   const updateBeds = async (type, value) => {
     if (!hospital) return;
 
-    const fieldMap = {
-      'general': 'availableBeds',
-      'icu': 'availableICU',
-      'ventilator': 'ventilatorBeds',
-      'hdu': 'hduBeds',
-      'isolation': 'isolationBeds'
-    };
+    const bedType = bedTypes.find(b => b.id === type);
+    if (!bedType) return;
 
-    const field = fieldMap[type];
-    const newValue = Math.max(0, (hospital[field] || 0) + value);
+    const field = bedType.field;
+    const currentValue = hospital[field] || 0;
+    const newValue = Math.max(0, currentValue + value);
     
     try {
       const hospitalRef = doc(db, "hospitals", hospitalId);
@@ -136,14 +237,15 @@ function HospitalDashboard() {
         [field]: newValue
       });
       
-      toast.success(`${type === 'general' ? '🛏️ General Bed' : type === 'icu' ? '💉 ICU Bed' : type} ${value > 0 ? 'added' : 'removed'}!`);
+      toast.success(`${bedType.name} ${value > 0 ? 'added' : 'removed'}!`);
 
       addRecentUpdate(
-        `${type === 'general' ? '🛏️' : type === 'icu' ? '💉' : '🏥'} ${type} bed ${value > 0 ? 'added' : 'removed'} (${newValue} available)`,
+        `${bedType.icon} ${bedType.name} bed ${value > 0 ? 'added' : 'removed'} (${newValue} available)`,
         'success'
       );
       
     } catch (error) {
+      console.error("Error updating beds:", error);
       toast.error("Failed to update beds");
     }
   };
@@ -157,14 +259,17 @@ function HospitalDashboard() {
       const currentUnits = bloodInventory[bloodType] || 0;
       const newUnits = Math.max(0, currentUnits + value);
       
+      // Create updated blood inventory
+      const updatedBloodInventory = {
+        ...bloodInventory,
+        [bloodType]: newUnits
+      };
+      
       await updateDoc(hospitalRef, {
         [`bloodBank.${bloodType}`]: newUnits
       });
       
-      setBloodInventory(prev => ({
-        ...prev,
-        [bloodType]: newUnits
-      }));
+      setBloodInventory(updatedBloodInventory);
       
       toast.success(`🩸 ${bloodType} ${value > 0 ? 'added' : 'removed'}!`);
 
@@ -174,6 +279,7 @@ function HospitalDashboard() {
       );
       
     } catch (error) {
+      console.error("Error updating blood bank:", error);
       toast.error("Failed to update blood bank");
     }
   };
@@ -186,10 +292,18 @@ function HospitalDashboard() {
         available: !currentStatus
       });
       
+      // Update local state
+      setDoctors(prevDoctors =>
+        prevDoctors.map(doc =>
+          doc.id === doctorId ? { ...doc, available: !currentStatus } : doc
+        )
+      );
+      
       toast.success(`👨‍⚕️ Doctor availability updated!`);
       addRecentUpdate(`👨‍⚕️ Doctor availability toggled`, 'info');
       
     } catch (error) {
+      console.error("Error updating doctor status:", error);
       toast.error("Failed to update doctor status");
     }
   };
@@ -214,14 +328,10 @@ function HospitalDashboard() {
 
   // Get available count for bed type
   const getAvailableCount = (type) => {
-    const fieldMap = {
-      'general': hospital?.availableBeds || 0,
-      'icu': hospital?.availableICU || 0,
-      'ventilator': hospital?.ventilatorBeds || 0,
-      'hdu': hospital?.hduBeds || 0,
-      'isolation': hospital?.isolationBeds || 0
-    };
-    return fieldMap[type];
+    if (!hospital) return 0;
+    const bedType = bedTypes.find(b => b.id === type);
+    if (!bedType) return 0;
+    return hospital[bedType.field] || 0;
   };
 
   if (loading) {
@@ -236,13 +346,13 @@ function HospitalDashboard() {
     );
   }
 
-  // Calculate statistics
-  const totalDoctors = doctors.length;
-  const availableDoctors = doctors.filter(d => d.available).length;
+  // Calculate statistics with null checks
+  const totalDoctors = doctors?.length || 0;
+  const availableDoctors = doctors?.filter(d => d?.available).length || 0;
   const totalBeds = hospital?.totalBeds || 200;
   const occupiedBeds = totalBeds - (hospital?.availableBeds || 0);
-  const bedOccupancyRate = Math.round((occupiedBeds / totalBeds) * 100);
-  const totalBloodUnits = Object.values(bloodInventory).reduce((a, b) => a + b, 0);
+  const bedOccupancyRate = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
+  const totalBloodUnits = Object.values(bloodInventory || {}).reduce((a, b) => a + b, 0);
   const criticalBloodTypes = bloodTypes.filter(type => (bloodInventory[type] || 0) < 10);
 
   return (
@@ -518,7 +628,7 @@ function HospitalDashboard() {
                   <div className="specialization-list">
                     <h4>By Specialization</h4>
                     {['Cardiologist', 'Surgeon', 'Physician'].map(spec => {
-                      const count = doctors.filter(d => d.specialization === spec).length;
+                      const count = doctors.filter(d => d?.specialization === spec).length;
                       return count > 0 && (
                         <div key={spec} className="spec-item">
                           <span>{spec}</span>
@@ -538,12 +648,16 @@ function HospitalDashboard() {
                   </div>
                   <div className="critical-levels">
                     <h4>Critical Levels</h4>
-                    {criticalBloodTypes.map(type => (
-                      <div key={type} className="critical-item">
-                        <span>{type}</span>
-                        <span>{bloodInventory[type] || 0} units</span>
-                      </div>
-                    ))}
+                    {criticalBloodTypes.length > 0 ? (
+                      criticalBloodTypes.map(type => (
+                        <div key={type} className="critical-item">
+                          <span>{type}</span>
+                          <span>{bloodInventory[type] || 0} units</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="no-critical">No critical levels</p>
+                    )}
                   </div>
                 </div>
 
@@ -551,12 +665,16 @@ function HospitalDashboard() {
                 <div className="info-card">
                   <h3>📋 Recent Updates</h3>
                   <div className="recent-updates">
-                    {recentUpdates.slice(0, 5).map(update => (
-                      <div key={update.id} className={`update-item ${update.type}`}>
-                        <span>{update.message}</span>
-                        <span className="update-time">{update.time}</span>
-                      </div>
-                    ))}
+                    {recentUpdates.length > 0 ? (
+                      recentUpdates.slice(0, 5).map(update => (
+                        <div key={update.id} className={`update-item ${update.type}`}>
+                          <span>{update.message}</span>
+                          <span className="update-time">{update.time}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="no-updates">No recent updates</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -592,6 +710,7 @@ function HospitalDashboard() {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => updateBeds(bed.id, -1)}
+                          disabled={count <= 0}
                         >
                           <FaMinusCircle /> -
                         </motion.button>
@@ -638,6 +757,7 @@ function HospitalDashboard() {
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => updateBloodUnit(type, -1)}
+                          disabled={units <= 0}
                         >
                           <FaMinusCircle /> Remove
                         </motion.button>
@@ -663,55 +783,59 @@ function HospitalDashboard() {
             <div className="doctors-tab">
               <h3>👨‍⚕️ Medical Staff Directory</h3>
               <div className="doctors-grid">
-                {doctors.map(doctor => (
-                  <motion.div 
-                    key={doctor.id} 
-                    className="doctor-card"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ y: -3 }}
-                  >
-                    <div className="doctor-header">
-                      <div className="doctor-avatar">
-                        {doctor.name ? doctor.name.charAt(0).toUpperCase() : '👨‍⚕️'}
+                {doctors.length > 0 ? (
+                  doctors.map(doctor => (
+                    <motion.div 
+                      key={doctor.id} 
+                      className="doctor-card"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      whileHover={{ y: -3 }}
+                    >
+                      <div className="doctor-header">
+                        <div className="doctor-avatar">
+                          {doctor.name ? doctor.name.charAt(0).toUpperCase() : '👨‍⚕️'}
+                        </div>
+                        <div>
+                          <h4>Dr. {doctor.name}</h4>
+                          <p>{doctor.specialization}</p>
+                        </div>
+                        <motion.button 
+                          className={`availability-badge ${doctor.available ? 'available' : 'unavailable'}`}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => toggleDoctorAvailability(doctor.id, doctor.available)}
+                        >
+                          {doctor.available ? '✅ Available' : '❌ Unavailable'}
+                        </motion.button>
                       </div>
-                      <div>
-                        <h4>Dr. {doctor.name}</h4>
-                        <p>{doctor.specialization}</p>
+                      <div className="doctor-details">
+                        <p><span>📅 Experience:</span> {doctor.experience || 12} years</p>
+                        <p><span>⭐ Success Rate:</span> {doctor.successRate || 95}%</p>
+                        <p><span>📋 Operations:</span> {doctor.operations || 150}+</p>
+                        <p><span>📞 Contact:</span> {doctor.phone || '+91 98765 43210'}</p>
                       </div>
-                      <motion.button 
-                        className={`availability-badge ${doctor.available ? 'available' : 'unavailable'}`}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => toggleDoctorAvailability(doctor.id, doctor.available)}
-                      >
-                        {doctor.available ? '✅ Available' : '❌ Unavailable'}
-                      </motion.button>
-                    </div>
-                    <div className="doctor-details">
-                      <p><span>📅 Experience:</span> {doctor.experience || 12} years</p>
-                      <p><span>⭐ Success Rate:</span> {doctor.successRate || 95}%</p>
-                      <p><span>📋 Operations:</span> {doctor.operations || 150}+</p>
-                      <p><span>📞 Contact:</span> {doctor.phone || '+91 98765 43210'}</p>
-                    </div>
-                    <div className="doctor-footer">
-                      <div className="rating">
-                        <span>⭐ {doctor.rating || 4.5}</span>
+                      <div className="doctor-footer">
+                        <div className="rating">
+                          <span>⭐ {doctor.rating || 4.5}</span>
+                        </div>
+                        <motion.button 
+                          className="view-profile-btn"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => {
+                            setSelectedDoctor(doctor);
+                            setShowDoctorModal(true);
+                          }}
+                        >
+                          View Profile
+                        </motion.button>
                       </div>
-                      <motion.button 
-                        className="view-profile-btn"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                          setSelectedDoctor(doctor);
-                          setShowDoctorModal(true);
-                        }}
-                      >
-                        View Profile
-                      </motion.button>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  ))
+                ) : (
+                  <p className="no-doctors">No doctors found</p>
+                )}
               </div>
             </div>
           )}
@@ -721,17 +845,21 @@ function HospitalDashboard() {
             <div className="activities-tab">
               <h3>📋 Recent Hospital Updates</h3>
               <div className="activities-list">
-                {recentUpdates.map(update => (
-                  <motion.div 
-                    key={update.id} 
-                    className={`activity-item ${update.type}`}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                  >
-                    <span className="activity-time">{update.time}</span>
-                    <span className="activity-message">{update.message}</span>
-                  </motion.div>
-                ))}
+                {recentUpdates.length > 0 ? (
+                  recentUpdates.map(update => (
+                    <motion.div 
+                      key={update.id} 
+                      className={`activity-item ${update.type}`}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                    >
+                      <span className="activity-time">{update.time}</span>
+                      <span className="activity-message">{update.message}</span>
+                    </motion.div>
+                  ))
+                ) : (
+                  <p className="no-activities">No recent activities</p>
+                )}
               </div>
             </div>
           )}

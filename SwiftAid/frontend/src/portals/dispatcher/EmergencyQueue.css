@@ -1,42 +1,92 @@
+.queue-container {
+  padding: 30px;
+}
+
+.queue-container h2 {
+  margin-bottom: 20px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
 .emergency-table {
   width: 100%;
-  margin-top: 30px;
   border-collapse: collapse;
   background: white;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .emergency-table th,
 .emergency-table td {
-  padding: 15px;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
   text-align: left;
 }
 
-.emergency-table th {
-  background: #1a2a3a;
-  color: white;
+.priority-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
 }
 
-.priority.High {
-  color: red;
-  font-weight: bold;
+.priority-badge.high {
+  background: #ffe5e5;
+  color: #c62828;
 }
 
-.priority.Medium {
-  color: orange;
-  font-weight: bold;
+.priority-badge.medium {
+  background: #fff4e5;
+  color: #f57c00;
 }
 
-.priority.Low {
-  color: green;
-  font-weight: bold;
+.priority-badge.low {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background: #fff4e5;
+  color: #f57c00;
+}
+
+.status-badge.assigned {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-badge.completed {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.assign-btn,
+.complete-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .assign-btn {
-  padding: 8px 12px;
-  background: #00e0ff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  background: #1e88e5;
+  color: white;
+}
+
+.complete-btn {
+  background: #2e7d32;
+  color: white;
+}
+
+.done-text {
+  color: green;
+  font-weight: bold;
 }

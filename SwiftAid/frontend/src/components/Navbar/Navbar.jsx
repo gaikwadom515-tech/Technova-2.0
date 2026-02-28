@@ -47,7 +47,7 @@ function Navbar() {
       <ul className={`navbar-right ${menuOpen ? "active" : ""}`}>
 
         <li className="nav-item">
-          <NavLink to="/" className="nav-link" onClick={closeMenu}>
+          <NavLink to="/Home" className="nav-link" onClick={closeMenu}>
             <span className="nav-icon">🏠</span> Home
           </NavLink>
         </li>

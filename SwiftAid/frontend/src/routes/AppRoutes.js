@@ -15,7 +15,8 @@ function AppRoutes() {
     <Router>
       <Routes>
        
-        <Route path="/Home" element={<Home />} />
+        <Route path="/" element={<Home />} />
+         <Route path="/Home" element={<Home />} />
         <Route path="/citizen" element={<SOS />} />
         <Route path="/dispatcher" element={<EmergencyQueue />} />
         <Route path="/driver" element={<DriverDashboard />} />

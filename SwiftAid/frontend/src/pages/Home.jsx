@@ -33,12 +33,7 @@ function Home() {
     }
   ];
 
-  const stats = [
-    { value: "120+", label: "Active Ambulances", icon: "🚑" },
-    { value: "75+", label: "Connected Hospitals", icon: "🏥" },
-    { value: "350+", label: "Daily Emergencies", icon: "🚨" },
-    { value: "98%", label: "Response Efficiency", icon: "⚡" }
-  ];
+
 
   const workflowSteps = [
     { number: "1", title: "SOS Alert", description: "Citizen sends emergency alert with auto-location", icon: "🆘" },
@@ -61,7 +56,7 @@ function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="hero-badge">🚀 Emergency Response System</div>
+            
             <h1>
               <span className="gradient-text">SwiftAid</span>
               <br />
@@ -119,48 +114,28 @@ function Home() {
             <div className="floating-card card-1">
               <span>🚑</span>
               <div>
-                <strong>Ambulance En Route</strong>
+                <strong>Ambulance En Route  </strong>
                 <small>ETA: 4 mins</small>
               </div>
             </div>
             <div className="floating-card card-2">
               <span>🏥</span>
               <div>
-                <strong>City Hospital</strong>
+                <strong>City Hospital  </strong>
                 <small>ICU: 3 beds available</small>
               </div>
             </div>
             <div className="floating-card card-3">
               <span>🩸</span>
               <div>
-                <strong>Blood Bank</strong>
+                <strong>Blood Bank      </strong>
                 <small>O+ : 12 units</small>
               </div>
             </div>
           </motion.div>
         </section>
 
-        {/* Stats Section */}
-        <section className="stats-section">
-          <div className="stats-grid">
-            {stats.map((stat, index) => (
-              <motion.div 
-                key={index}
-                className="stat-card"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="stat-icon">{stat.icon}</div>
-                <div className="stat-content">
-                  <h2>{stat.value}</h2>
-                  <p>{stat.label}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
+       
 
         {/* Features Section */}
         <section className="features-section">
