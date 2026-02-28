@@ -21,9 +21,7 @@ import {
   FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
-  FaStethoscope,
-  FaSyringe,
-  FaPills,
+  
   FaUserNurse,
   FaAmbulance,
   FaChartLine

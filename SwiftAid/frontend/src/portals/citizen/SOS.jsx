@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import CitizenLayout from "../../layouts/CitizenLayout";
@@ -35,6 +35,7 @@ function SOS() {
 
   useEffect(() => {
     getCurrentLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getCurrentLocation = () => {
@@ -53,15 +54,15 @@ function SOS() {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
+
         try {
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`
           );
           const data = await response.json();
-          
+
           const address = data.address || {};
-          
+
           setLocation({
             lat: latitude,
             lng: longitude,
@@ -76,8 +77,9 @@ function SOS() {
           });
 
           findNearbyHospitals(latitude, longitude);
-          
-        } catch (error) {
+
+        } catch (err) {
+          console.error("Error fetching address:", err);
           setLocation({
             lat: latitude,
             lng: longitude,
@@ -92,7 +94,8 @@ function SOS() {
           });
         }
       },
-      (error) => {
+      (err) => {
+        console.error("Geolocation error:", err);
         setLocation(prev => ({
           ...prev,
           isLoading: false,
@@ -104,53 +107,54 @@ function SOS() {
   };
 
   const findNearbyHospitals = (lat, lng) => {
+    console.debug(`Finding hospitals near ${lat}, ${lng}`);
     const mockHospitals = [
-      { 
-        id: 1, 
-        name: "City General Hospital", 
-        distance: "1.2", 
-        eta: "4 mins", 
-        beds: 45, 
+      {
+        id: 1,
+        name: "City General Hospital",
+        distance: "1.2",
+        eta: "4 mins",
+        beds: 45,
         emergency: true,
         rating: 4.5,
         phone: "108",
         address: "Near Pune Station, Pune"
       },
-      { 
-        id: 2, 
-        name: "St. Mary's Medical Center", 
-        distance: "2.5", 
-        eta: "8 mins", 
-        beds: 28, 
+      {
+        id: 2,
+        name: "St. Mary's Medical Center",
+        distance: "2.5",
+        eta: "8 mins",
+        beds: 28,
         emergency: true,
         rating: 4.3,
         phone: "108",
         address: "FC Road, Shivajinagar, Pune"
       },
-      { 
-        id: 3, 
-        name: "Apollo Clinic", 
-        distance: "3.8", 
-        eta: "12 mins", 
-        beds: 15, 
+      {
+        id: 3,
+        name: "Apollo Clinic",
+        distance: "3.8",
+        eta: "12 mins",
+        beds: 15,
         emergency: false,
         rating: 4.7,
         phone: "108",
         address: "Kothrud, Pune"
       },
-      { 
-        id: 4, 
-        name: "KEM Hospital", 
-        distance: "4.2", 
-        eta: "15 mins", 
-        beds: 60, 
+      {
+        id: 4,
+        name: "KEM Hospital",
+        distance: "4.2",
+        eta: "15 mins",
+        beds: 60,
         emergency: true,
         rating: 4.8,
         phone: "108",
         address: "Rasta Peth, Pune"
       }
     ];
-    
+
     setNearbyHospitals(mockHospitals);
   };
 
@@ -159,47 +163,48 @@ function SOS() {
   };
 
   const handleSOS = async () => {
-  if (!formData.callerName || !formData.callerPhone) {
-    setError("Please enter your name and phone number.");
-    return;
-  }
+    if (!formData.callerName || !formData.callerPhone) {
+      setError("Please enter your name and phone number.");
+      return;
+    }
 
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    const incidentData = {
-      ...formData,
-      lat: location.lat,
-      lng: location.lng,
-      locationAddress: location.address,
-      selectedHospital: selectedHospital?.name,
-      hospitalAddress: selectedHospital?.address,
-      createdAt: serverTimestamp(),
-      incidentId: `INC${Date.now()}`,
-      status: "pending",
-      priority: "high",
-      assignedAmbulance: null,
-    };
+    try {
+      const incidentData = {
+        ...formData,
+        lat: location.lat,
+        lng: location.lng,
+        locationAddress: location.address,
+        selectedHospital: selectedHospital?.name,
+        hospitalAddress: selectedHospital?.address,
+        createdAt: serverTimestamp(),
+        incidentId: `INC${Date.now()}`,
+        status: "pending",
+        priority: "high",
+        assignedAmbulance: null,
+      };
 
-    await addDoc(collection(db, "incidents"), incidentData);
+      await addDoc(collection(db, "incidents"), incidentData);
 
-    setSuccess(true);
-    setFormData({
-      emergencyType: "Cardiac",
-      callerName: "",
-      callerPhone: "",
-      description: ""
-    });
+      setSuccess(true);
+      setFormData({
+        emergencyType: "Cardiac",
+        callerName: "",
+        callerPhone: "",
+        description: ""
+      });
 
-    setTimeout(() => {
-      setSuccess(false);
+      setTimeout(() => {
+        setSuccess(false);
+        setIsSubmitting(false);
+      }, 3000);
+    } catch (err) {
+      console.error("SOS Error:", err);
+      setError("Failed to send SOS");
       setIsSubmitting(false);
-    }, 3000);
-  } catch (error) {
-    setError("Failed to send SOS");
-    setIsSubmitting(false);
-  }
-};
+    }
+  };
   const clearSelection = () => {
     setSelectedHospital(null);
   };
@@ -260,13 +265,13 @@ function SOS() {
                   </button>
                 </div>
               </div>
-              
+
               <div className="location-details">
                 <div className="detail-row">
                   <strong>📍 Address:</strong>
                   <p>{location.address || "बाल शिक्षण मंदिर, व. कृ. धामगोकर पथ, Kothrud, Anandnagar, पुणे शहर, Pune District, Maharashtra, 411029, India"}</p>
                 </div>
-                
+
                 <div className="detail-row grid">
                   <div className="detail-item">
                     <span>🏙️ City:</span>
@@ -314,54 +319,54 @@ function SOS() {
           </div>
         </div>
         {/* Caller Information */}
-<div className="caller-section">
-  <h3>👤 Caller Information</h3>
+        <div className="caller-section">
+          <h3>👤 Caller Information</h3>
 
-  <div className="caller-grid">
-    <div className="input-group">
-      <label>Full Name *</label>
-      <input
-        type="text"
-        placeholder="Enter your name"
-        value={formData.callerName}
-        onChange={(e) =>
-          setFormData({ ...formData, callerName: e.target.value })
-        }
-      />
-    </div>
+          <div className="caller-grid">
+            <div className="input-group">
+              <label>Full Name *</label>
+              <input
+                type="text"
+                placeholder="Enter your name"
+                value={formData.callerName}
+                onChange={(e) =>
+                  setFormData({ ...formData, callerName: e.target.value })
+                }
+              />
+            </div>
 
-    <div className="input-group">
-      <label>Phone Number *</label>
-      <input
-        type="tel"
-        placeholder="Enter phone number"
-        value={formData.callerPhone}
-        onChange={(e) =>
-          setFormData({ ...formData, callerPhone: e.target.value })
-        }
-      />
-    </div>
-  </div>
+            <div className="input-group">
+              <label>Phone Number *</label>
+              <input
+                type="tel"
+                placeholder="Enter phone number"
+                value={formData.callerPhone}
+                onChange={(e) =>
+                  setFormData({ ...formData, callerPhone: e.target.value })
+                }
+              />
+            </div>
+          </div>
 
-  <div className="input-group">
-    <label>Description (Optional)</label>
-    <textarea
-      rows="3"
-      placeholder="Describe the emergency..."
-      value={formData.description}
-      onChange={(e) =>
-        setFormData({ ...formData, description: e.target.value })
-      }
-    />
-  </div>
-</div>
+          <div className="input-group">
+            <label>Description (Optional)</label>
+            <textarea
+              rows="3"
+              placeholder="Describe the emergency..."
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+            />
+          </div>
+        </div>
 
         {/* Nearby Hospitals */}
         <div className="nearby-hospitals">
           <h3>🏥 Nearest Hospitals (Click to select for SOS)</h3>
           <div className="hospital-list">
             {nearbyHospitals.map((hospital, index) => (
-              <motion.div 
+              <motion.div
                 key={hospital.id}
                 className={`hospital-item ${selectedHospital?.id === hospital.id ? 'selected-for-sos' : ''}`}
                 initial={{ x: -20, opacity: 0 }}
@@ -387,7 +392,7 @@ function SOS() {
                 {hospital.emergency && (
                   <span className="emergency-badge">24/7</span>
                 )}
-                <button 
+                <button
                   className="select-hospital-btn"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -404,7 +409,7 @@ function SOS() {
         {/* Hospital Selection Indicator */}
         <AnimatePresence>
           {selectedHospital && (
-            <motion.div 
+            <motion.div
               className="hospital-selection-indicator"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -415,7 +420,7 @@ function SOS() {
                 <strong>{selectedHospital.name}</strong>
                 <span>selected for SOS</span>
               </div>
-              <button 
+              <button
                 className="clear-selection"
                 onClick={clearSelection}
               >
@@ -427,7 +432,7 @@ function SOS() {
 
         {/* SOS Button */}
         <div className="sos-button-container">
-          <motion.button 
+          <motion.button
             className={`sos-button ${!selectedHospital ? 'pulsing' : ''} ${isSubmitting ? 'submitting' : ''}`}
             onClick={handleSOS}
             disabled={isSubmitting || success}
@@ -443,7 +448,7 @@ function SOS() {
         {/* Success Message */}
         <AnimatePresence>
           {success && (
-            <motion.div 
+            <motion.div
               className="success-message"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -461,7 +466,7 @@ function SOS() {
         {/* Error Message */}
         <AnimatePresence>
           {error && (
-            <motion.div 
+            <motion.div
               className="error-message"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -477,7 +482,7 @@ function SOS() {
           <div className="map-container">
             <iframe
               title="Current Location Map"
-              src={`https://www.openstreetmap.org/export/embed.html?bbox=${location.lng-0.01}%2C${location.lat-0.01}%2C${location.lng+0.01}%2C${location.lat+0.01}&layer=mapnik&marker=${location.lat}%2C${location.lng}`}
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${location.lng - 0.01}%2C${location.lat - 0.01}%2C${location.lng + 0.01}%2C${location.lat + 0.01}&layer=mapnik&marker=${location.lat}%2C${location.lng}`}
               className="map-iframe"
               allowFullScreen
               loading="lazy"
@@ -486,7 +491,7 @@ function SOS() {
               📍 Your Location
             </div>
           </div>
-          <a 
+          <a
             href={`https://www.openstreetmap.org/?mlat=${location.lat}&mlon=${location.lng}#map=16/${location.lat}/${location.lng}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -497,7 +502,7 @@ function SOS() {
         </div>
 
         {/* Quick Tips Toggle */}
-        <button 
+        <button
           className="tips-toggle"
           onClick={() => setShowTips(!showTips)}
         >
@@ -506,7 +511,7 @@ function SOS() {
 
         <AnimatePresence>
           {showTips && (
-            <motion.div 
+            <motion.div
               className="quick-tips"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
