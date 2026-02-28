@@ -34,10 +34,10 @@ function SOS() {
   const [showTips, setShowTips] = useState(false);
 
   useEffect(() => {
-    getCurrentLocation();
-  }, []);
+  getCurrentLocation();
+}, [getCurrentLocation]);
 
-  const getCurrentLocation = () => {
+  function getCurrentLocation() {
     setLocation(prev => ({ ...prev, isLoading: true, error: null }));
 
     if (!navigator.geolocation) {
@@ -53,15 +53,15 @@ function SOS() {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
+
         try {
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`
           );
           const data = await response.json();
-          
+
           const address = data.address || {};
-          
+
           setLocation({
             lat: latitude,
             lng: longitude,
@@ -76,7 +76,7 @@ function SOS() {
           });
 
           findNearbyHospitals(latitude, longitude);
-          
+
         } catch (error) {
           setLocation({
             lat: latitude,
@@ -101,7 +101,7 @@ function SOS() {
         }));
       }
     );
-  };
+  }
 
   const findNearbyHospitals = (lat, lng) => {
     const mockHospitals = [
