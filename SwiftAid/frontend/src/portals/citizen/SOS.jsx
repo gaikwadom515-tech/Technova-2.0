@@ -35,10 +35,9 @@ function SOS() {
 
   useEffect(() => {
     getCurrentLocation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getCurrentLocation = () => {
+  function getCurrentLocation() {
     setLocation(prev => ({ ...prev, isLoading: true, error: null }));
 
     if (!navigator.geolocation) {
@@ -77,9 +76,8 @@ function SOS() {
           });
 
           findNearbyHospitals(latitude, longitude);
-
-        } catch (err) {
-          console.error("Error fetching address:", err);
+          
+        } catch (error) {
           setLocation({
             lat: latitude,
             lng: longitude,
@@ -104,7 +102,7 @@ function SOS() {
         }));
       }
     );
-  };
+  }
 
   const findNearbyHospitals = (lat, lng) => {
     console.debug(`Finding hospitals near ${lat}, ${lng}`);
