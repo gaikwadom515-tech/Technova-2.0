@@ -33,9 +33,11 @@ function SOS() {
   const [success, setSuccess] = useState(false);
   const [showTips, setShowTips] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
     getCurrentLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
 
   function getCurrentLocation() {
     setLocation(prev => ({ ...prev, isLoading: true, error: null }));
